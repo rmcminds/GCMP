@@ -2,8 +2,8 @@ source ~/.bashrc
 
 nthreads=4
 
-indir=
-outdir=
+indir=output/S1_20180718_15_28_51
+outdir=output/S1_20180718_15_28_51
 
 gg_reference_tree=/raid1/home/micro/mcmindsr/labhome/databases/gg_13_8_otus/trees/97_otus_unannotated.tree
 gg_reference_seqs=/raid1/home/micro/mcmindsr/labhome/databases/gg_13_8_otus/rep_set/97_otus.fasta
