@@ -51,15 +51,14 @@ for file in ${outdir}/demultiplexed/fastqs/*_R1.fastq.gz; do
         ## concatenate the forward read to the reverse complement of the reverse read. might consider trimming the reverse read first if they are low quality?
 		paste <(zcat ${file}) <(vsearch --fastx_revcomp ${file/R1/R2} --fastqout -) |
 
-            ## fix headers so they contain the sequence itself and the sample ID
-            awk '(NR % 4) == 1 {print ">"} (NR % 4) == 2 {print $1$2}' |
-                awk -v sample=${sampleid} '$0 !~ ">" && length($0) > 0 {print ">"$0";sample="sample"\n"$0}' |
+            ## convert to fasta and construct headers as the sequence itself plus the sample ID
+            awk -v sample=${sampleid} '(NR % 4) == 2 {print ">"$1$2";sample="sample"\n"$1$2}' |
 
-                    ## derep sequences
-                    vsearch --derep_fulllength - --sizeout --output - |
+                ## derep sequences
+                vsearch --derep_fulllength - --sizeout --output - |
 
-                        ## denoise sequences
-                        vsearch --cluster_unoise - --sizein --sizeout --fasta_width 0 --centroids ${outdir}/filtered/${sampleid}_denoised.fasta
+                    ## denoise sequences
+                    vsearch --cluster_unoise - --sizein --sizeout --fasta_width 0 --centroids ${outdir}/filtered/${sampleid}_denoised.fasta
 
         ## remove chimeras
         vsearch --uchime3_denovo ${outdir}/filtered/${sampleid}_denoised.fasta --sizein --sizeout --fasta_width 0 --nonchimeras ${outdir}/filtered/${sampleid}_denoised_nonchimeras.fasta
