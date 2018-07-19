@@ -1,0 +1,7 @@
+raw_data/
+output/
+*.rds
+private_*
+sge_logs*
+intermediate_data/
+sge_*/
